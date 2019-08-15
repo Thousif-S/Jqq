@@ -3,7 +3,7 @@ defmodule Jqq.Accounts do
 
   alias Jqq.Repo
 
-  alias Jqq.Accounts.User
+  alias Jqq.Accounts.{User, Profile, Company}
 
   def get_user(id) do
     Repo.get(User, id)
@@ -24,6 +24,22 @@ defmodule Jqq.Accounts do
     else
       _ -> :error
     end
+  end
+
+  def create_profile(attrs) do
+    %Profile{}
+    |> Profile.changeset(attrs)
+    |> Repo.insert()
+  end
+
+  def update_profile(%Profile{} = profile, attrs) do
+    profile
+    |> Profile.changeset(attrs)
+    |> Repo.update()
+  end
+
+  def list_users do
+    Repo.all(User)
   end
 
   def datasource() do

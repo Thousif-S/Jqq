@@ -6,7 +6,6 @@ defmodule Jqq.Work.Job do
   schema "jobs" do
     field :title, :string
     field :slug, :string
-    field :category, :string
     field :description, :string
     field :image, :string
     field :salary, :string
@@ -19,16 +18,30 @@ defmodule Jqq.Work.Job do
     has_many :applies, Jqq.Work.Apply
     belongs_to :company, Jqq.Accounts.Company
 
+    belongs_to :category, Jqq.Work.Category
+
+    many_to_many :tags, Jqq.Work.Tag, join_through: "jobs_tagging"
+
     timestamps()
   end
 
   def changeset(job, attrs) do
-    required_fields = [:title, :description, :category, :about_us, :slug, :company_id]
+    required_fields = [
+      :title,
+      :description,
+      :about_us,
+      :slug,
+      :company_id,
+      :category_id
+    ]
+
     optional_fields = [:image, :salary, :prerequisites, :taking_applicants_till]
 
     job
     |> cast(attrs, required_fields ++ optional_fields)
     |> validate_required(required_fields)
+    |> cast_assoc(:tags)
+    |> foreign_key_constraint(:category, :company)
     |> unique_constraint(:slug)
   end
 end
