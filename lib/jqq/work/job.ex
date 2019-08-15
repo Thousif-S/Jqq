@@ -14,6 +14,7 @@ defmodule Jqq.Work.Job do
     # field :type, :string, default: "job"
     field :about_us, :string
     field :taking_applicants_till, :date
+    field :location, :string
 
     has_many :reviews, Jqq.Work.Review
     belongs_to :company, Jqq.Accounts.Company
