@@ -6,12 +6,12 @@ defmodule Jqq.Repo.Migrations.CreateReviews do
       add :rating, :integer, null: true
       add :comment, :string, null: false
       add :user_id, references(:users), null: false
-      add :job_id, references(:jobs), null: true
+      add :company_id, references(:companies), null: true
 
       timestamps()
     end
 
     create index(:reviews, [:user_id])
-    create index(:reviews, [:job_id])
+    create index(:reviews, [:company_id])
   end
 end

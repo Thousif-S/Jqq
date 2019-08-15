@@ -10,6 +10,7 @@ defmodule Jqq.Accounts.Company do
     field :web, :string
 
     belongs_to :user, Jqq.Accounts.User
+    has_many :reviews, Jqq.Work.Review
 
     timestamps()
   end

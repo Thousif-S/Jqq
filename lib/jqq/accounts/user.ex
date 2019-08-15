@@ -8,6 +8,8 @@ defmodule Jqq.Accounts.User do
     field :password_hash, :string
     field :password, :string, virtual: true
 
+    has_many :applies, Jqq.Work.Apply
+
     has_many :reviews, Jqq.Work.Review
 
     timestamps()

@@ -6,19 +6,20 @@ defmodule Jqq.Work.Review do
     field :rating, :integer
     field :comment, :string
 
-    belongs_to :job, Jqq.Work.Job
+    belongs_to :company, Jqq.Accounts.Company
+    belongs_to :user, Jqq.Accounts.User
 
     timestamps(type: :utc_datetime)
   end
 
   def changeset(review, attrs) do
-    required_fields = [:comment, :job_id]
+    required_fields = [:comment, :company_id, :user_id]
     optional_fields = [:rating]
-    
+
     review
     |> cast(attrs, required_fields ++ optional_fields)
     |> validate_required(required_fields)
-    |> assoc_constraint(:place)
-    # |> assoc_constraint(:user)
+    |> assoc_constraint(:company)
+    |> assoc_constraint(:user)
   end
 end

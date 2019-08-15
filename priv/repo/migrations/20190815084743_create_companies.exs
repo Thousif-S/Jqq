@@ -13,7 +13,7 @@ defmodule Jqq.Repo.Migrations.CreateCompanies do
       timestamps()
     end
 
-    create unique_index(:companies, [:user_id])
+    create index(:companies, [:user_id])
 
   end
 end
