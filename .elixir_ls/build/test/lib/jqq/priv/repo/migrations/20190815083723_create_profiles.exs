@@ -13,6 +13,6 @@ defmodule Jqq.Repo.Migrations.CreateProfiles do
       timestamps()
     end
 
-    create unique_index(:profiles, [:user_id])
+    create index(:profiles, [:user_id])
   end
 end

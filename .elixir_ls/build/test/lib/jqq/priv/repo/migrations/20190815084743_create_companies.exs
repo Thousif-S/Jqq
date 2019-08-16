@@ -4,6 +4,7 @@ defmodule Jqq.Repo.Migrations.CreateCompanies do
   def change do
     create table(:companies) do
       add :name, :string, null: false
+      add :slug, :string, null: false
       add :about_us, :string, null: false
       add :phone, :string, null: true
       add :address, :string, null: false
@@ -13,7 +14,8 @@ defmodule Jqq.Repo.Migrations.CreateCompanies do
       timestamps()
     end
 
-    create unique_index(:companies, [:user_id])
+    create index(:companies, [:user_id])
 
+    create unique_index(:companies, [:slug])
   end
 end

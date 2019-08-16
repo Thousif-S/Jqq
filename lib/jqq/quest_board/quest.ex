@@ -9,7 +9,7 @@ defmodule Jqq.QuestBoard.Quest do
 
         belongs_to :user, Jqq.Accounts.User
 
-        has_many :review, Jqq.Work.Review
+        # has_many :review, Jqq.Work.Review
 
         timestamps()
     end

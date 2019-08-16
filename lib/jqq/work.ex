@@ -2,7 +2,7 @@ defmodule Jqq.Work do
   import Ecto.Query, warn: false
   alias Jqq.Repo
 
-  alias Jqq.Work.{Job, Review}
+  alias Jqq.Work.{Job, Review, Apply, Category, Tag}
   alias Jqq.Accounts.User
 
   def get_job_by_slug!(slug) do
@@ -40,7 +40,36 @@ defmodule Jqq.Work do
             ilike(q.title, ^pattern) or
               ilike(q.description, ^pattern) or
               ilike(q.prerequisites, ^pattern) or
-              ilike(q.location, ^pattern)
+              ilike(q.location, ^pattern) or
+              ilike(q.category, ^pattern)
     end)
+  end
+
+  def create_job(attrs) do
+    %Job{}
+    |> Job.changeset(attrs)
+    |> Repo.insert()
+  end
+
+  def update_job(%Job{} = job, attrs) do
+    job
+    |> Job.changeset(attrs)
+    |> Repo.update()
+  end
+
+  def delete_job(%Job{} = job) do
+    Repo.delete(job)
+  end
+
+  def create_tags(attrs) do
+    %Tag{}
+    |> Tag.changeset(attrs)
+    |> Repo.insert()
+  end
+
+  def create_categories(attrs) do
+    %Category{}
+    |> Category.changeset(attrs)
+    |> Repo.insert()
   end
 end

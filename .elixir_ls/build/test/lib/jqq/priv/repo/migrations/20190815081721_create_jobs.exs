@@ -5,7 +5,6 @@ defmodule Jqq.Repo.Migrations.CreateJobs do
     create table(:jobs) do
       add :title, :string, null: false
       add :slug, :string, null: false
-      add :category, :string, null: false
       add :description, :string, null: false
       add :image, :string, null: true
       add :salary, :string, null: true

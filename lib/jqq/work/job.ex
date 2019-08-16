@@ -20,7 +20,8 @@ defmodule Jqq.Work.Job do
 
     belongs_to :category, Jqq.Work.Category
 
-    many_to_many :tags, Jqq.Work.Tag, join_through: "jobs_tagging"
+    # many_to_many :tags, Jqq.Work.Tag, join_through: "jobs_tagging"
+    has_many :tag, Jqq.Work.Tag
 
     timestamps()
   end
@@ -35,13 +36,15 @@ defmodule Jqq.Work.Job do
       :category_id
     ]
 
-    optional_fields = [:image, :salary, :prerequisites, :taking_applicants_till]
+    optional_fields = [:image, :salary, :prerequisites, :taking_applicants_till, :tags]
 
     job
     |> cast(attrs, required_fields ++ optional_fields)
     |> validate_required(required_fields)
-    |> cast_assoc(:tags)
-    |> foreign_key_constraint(:category, :company)
+    |> cast_assoc(:tag)
+    |> cast_assoc(:category)
+    |> cast_assoc(:company)
+    # |> foreign_key_constraint(:category, :company)
     |> unique_constraint(:slug)
   end
 end

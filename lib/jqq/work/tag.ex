@@ -6,12 +6,12 @@ defmodule Jqq.Work.Tag do
   schema "tags" do
     field :name, :string, null: false
 
-    many_to_many :jobs, Jqq.Work.Job, join_through: "jobs_tagging"
+    belongs_to :job, Jqq.Work.Job
   end
 
   def changeset(%Tag{} = tag, attrs) do
     tag
-    |> cast(attrs, [:name])
+    |> cast(attrs, [:name, :job_id])
     |> cast_assoc(:jobs)
     |> validate_required([:name])
   end
