@@ -5,7 +5,7 @@ defmodule Jqq.Work.Apply do
 
   schema "applies" do
     field :short_intro, :string
-    field :request, :boolean, default: false
+    field :state, :string, default: "applied"
 
     belongs_to :job, Jqq.Work.Job
     belongs_to :user, Jqq.Accounts.User

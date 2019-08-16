@@ -72,4 +72,48 @@ defmodule Jqq.Work do
     |> Category.changeset(attrs)
     |> Repo.insert()
   end
+
+  def get_applicants do
+    Repo.all(Apply)
+  end
+
+  def create_applicant(%User{} = user, attrs) do
+    %Apply{}
+    |> Apply.changeset(attrs)
+    |> Ecto.Changeset.put_assoc(:user, user)
+    |> Repo.insert()
+  end
+
+  def cancel_applicant(%Apply{} = apply) do
+    apply
+    |> Apply.cancel_changeset(%{state: "cancelled"})
+    |> Repo.update()
+  end
+
+  def create_review(%User{} = user, attrs) do
+    %Review{}
+    |> Review.changeset(attrs)
+    |> Ecto.Changeset.put_assoc(:user, user)
+    |> Repo.insert()
+  end
+
+  def datasource() do
+    Dataloader.Ecto.new(Repo, query: &query/2)
+  end
+
+  def query(Apply, %{limit: limit, scope: :job}) do
+    Apply
+    |> where(state: "applied")
+    |> order_by(asc: :id)
+    |> limit(^limit)
+  end
+
+  def query(Apply, %{scope: :user}) do
+    Apply
+    |> order_by(asc: :id)
+  end
+
+  def query(queryable, _) do
+    queryable
+  end
 end
