@@ -11,7 +11,8 @@ defmodule Jqq.Work.Tag do
 
   def changeset(%Tag{} = tag, attrs) do
     tag
-    |> cast(attrs, [:name, :description])
+    |> cast(attrs, [:name])
+    |> cast_assoc(:jobs)
     |> validate_required([:name])
   end
 end

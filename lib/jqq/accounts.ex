@@ -42,6 +42,67 @@ defmodule Jqq.Accounts do
     Repo.all(User)
   end
 
+  def get_user_by_username(username) do
+    Repo.get_by!(User, username: username)
+  end
+
+  def create_company(attrs) do
+    %Company{}
+    |> Company.changeset(attrs)
+    |> Repo.insert()
+  end
+
+  def update_company(%Company{} = company, attrs) do
+    company
+    |> Company.changeset(attrs)
+    |> Repo.update()
+  end
+
+  def list_profiles do
+    Repo.all(Profile)
+  end
+
+  def get_people_by_name(first_name) do
+    Repo.get_by!(Profile, first_name: first_name)
+  end
+
+  def list_companies do
+    Repo.all(Company)
+  end
+
+  def get_company_by_slug!(slug) do
+    Repo.get_by!(Company, slug: slug)
+  end
+
+  def list_companies(criteria) do
+    query = from(c in Company)
+
+    Enum.reduce(criteria, query, fn
+      {:limit, limit}, query ->
+        from c in query, limit: ^limit
+
+      {:filter, filters}, query ->
+        filter_with(filters, query)
+
+      {:order, order}, query ->
+        from c in query, order_by: [{^order, :id}]
+    end)
+    |> IO.inspect()
+    |> Repo.all()
+  end
+
+  defp filter_with(filters, query) do
+    Enum.reduce(filters, query, fn
+      {:matching, term}, query ->
+        pattern = "%#{term}%"
+
+        from q in query,
+          where:
+            ilike(q.name, ^pattern) or
+              ilike(q.address, ^pattern)
+    end)
+  end
+
   def datasource() do
     Dataloader.Ecto.new(Repo, query: &query/2)
   end

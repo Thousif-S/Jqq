@@ -4,6 +4,7 @@ defmodule Jqq.Accounts.Company do
 
   schema "companies" do
     field :name, :string
+    field :slug, :string, null: false
     field :about_us, :string
     field :phone, :string
     field :address, :string
@@ -16,7 +17,7 @@ defmodule Jqq.Accounts.Company do
   end
 
   def changeset(company, attrs) do
-    required_fields = [:name, :about_us, :address, :user_id]
+    required_fields = [:name, :about_us, :address, :user_id, :slug]
     optional_fields = [:phone, :web]
 
     company
