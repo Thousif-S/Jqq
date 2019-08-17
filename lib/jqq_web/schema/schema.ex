@@ -4,8 +4,11 @@ defmodule JqqWeb.Schema.Schema do
   import_types(Absinthe.Type.Custom)
 
   alias JqqWeb.Resolvers
+  alias JqqWeb.Schema.Middleware
 
   alias Jqq.{Accounts, Work}
+
+  #### QUERY         
 
   query do
     @desc "Get a list of jobs"
@@ -50,6 +53,49 @@ defmodule JqqWeb.Schema.Schema do
     @desc "Get currently signed-in user"
     field :me, :user do
       resolve(&Resolvers.Accounts.me/3)
+    end
+  end
+
+  ### MUTATION !!!!!!!!!!
+
+  mutation do
+    @desc "Create a applicant"
+    field :create_applicant, :apply do
+      arg(:job_id, non_null(:id))
+      arg(:short_note, :string)
+      middleware(Middleware.Authenticate)
+      resolve(&Resolvers.Work.create_applicant/3)
+    end
+
+    @desc "Cancel a applicant"
+    field :cancel_applicant, :apply do
+      arg(:apply_id, non_null(:id))
+      middleware(Middleware.Authenticate)
+      resolve(&Resolvers.Work.cancel_applicant/3)
+    end
+
+    @desc "Create a review"
+    field :create_review, :review do
+      arg(:company_id, non_null(:id))
+      arg(:comment, non_null(:string))
+      arg(:rating, :integer)
+      middleware(Middleware.Authenticate)
+      resolve(&Resolvers.Work.create_review/3)
+    end
+
+    @desc "Create a User"
+    field :signup, :session do
+      arg(:username, non_null(:string))
+      arg(:email, non_null(:string))
+      arg(:password, non_null(:string))
+      resolve(&Resolvers.Accounts.signup/3)
+    end
+
+    @desc "Sign in as a User"
+    field :signin, :session do
+      arg :username, non_null(:string)
+      arg :password, non_null(:string)
+      resolve &Resolvers.Accounts.signin/3
     end
   end
 
@@ -122,6 +168,17 @@ defmodule JqqWeb.Schema.Schema do
     ## Add relations
   end
 
+  ######## What
+
+  object :session do
+    field :token, non_null(:string)
+    field :user, non_null(:user)
+  end
+
+  object :success_result do
+    field :message, non_null(:string)
+  end
+
   ###### Object of Acounts
 
   object :user do
@@ -170,5 +227,18 @@ defmodule JqqWeb.Schema.Schema do
   enum :sort_order do
     value(:asc)
     value(:desc)
+  end
+
+  def context(ctx) do
+    loader =
+      Dataloader.new()
+      |> Dataloader.add_source(Work, Work.datasource())
+      |> Dataloader.add_source(Accounts, Accounts.datasource())
+
+    Map.put(ctx, :loader, loader)
+  end
+
+  def plugins do
+    [Absinthe.Middleware.Dataloader] ++ Absinthe.Plugin.defaults()
   end
 end

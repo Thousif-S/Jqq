@@ -85,6 +85,10 @@ defmodule Jqq.Work do
     Repo.all(Apply)
   end
 
+  def get_applicant!(id) do
+    Repo.get!(Apply, id)
+  end
+
   def create_applicant(%User{} = user, attrs) do
     %Apply{}
     |> Apply.changeset(attrs)
