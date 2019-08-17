@@ -67,6 +67,14 @@ defmodule Jqq.Work do
     |> Repo.insert()
   end
 
+  def list_tags do
+    Repo.all(Tag)
+  end
+
+  def list_categories do
+    Repo.all(Category)
+  end
+
   def create_categories(attrs) do
     %Category{}
     |> Category.changeset(attrs)

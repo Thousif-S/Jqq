@@ -1,5 +1,6 @@
 defmodule JqqWeb.UserSocket do
   use Phoenix.Socket
+  use Absinthe.Phoenix.Socket, schema: JqqWeb.Schema.Schema
 
   ## Channels
   # channel "room:*", JqqWeb.RoomChannel

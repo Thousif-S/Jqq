@@ -17,6 +17,14 @@ defmodule JqqWeb.Router do
     pipe_through :browser
 
     get "/", PageController, :index
+
+    forward "/api", Absinthe.Plug,
+      schema: JqqWeb.Schema.Schema
+
+    forward "/graphql", Absinthe.Plug.GraphiQL,
+      schema: JqqWeb.Schema.Schema,
+      socket: JqqWeb.UserSocket,
+      interface: :simple
   end
 
   # Other scopes may use custom stacks.

@@ -1,9 +1,12 @@
 defmodule JqqWeb.Endpoint do
   use Phoenix.Endpoint, otp_app: :jqq
+  use Absinthe.Phoenix.Endpoint
 
   socket "/socket", JqqWeb.UserSocket,
     websocket: true,
     longpoll: false
+
+  plug CORSPlug
 
   # Serve at "/" the static files from "priv/static" directory.
   #
@@ -24,6 +27,7 @@ defmodule JqqWeb.Endpoint do
   end
 
   plug Plug.RequestId
+  plug Plug.Logger
   plug Plug.Telemetry, event_prefix: [:phoenix, :endpoint]
 
   plug Plug.Parsers,
